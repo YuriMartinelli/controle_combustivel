@@ -1,0 +1,2 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_custom_addons/controle_combustivel_custom_addons/controle_combustivel,custom_addons/controle_combustivel.custom_addons/controle_combustivel,model_custom_addons/controle_combustivel_custom_addons/controle_combustivel,base.group_user,1,1,1,1
