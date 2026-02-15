@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        
+        <!-- Categoria do Módulo -->
+        <record id="module_category_fuel_control" model="ir.module.category">
+            <field name="name">Controle de Combustível</field>
+            <field name="description">Gestão de abastecimentos e estoque de combustível</field>
+            <field name="sequence">50</field>
+        </record>
+
+        <!-- Grupo: Motorista -->
+        <record id="group_fuel_driver" model="res.groups">
+            <field name="name">Motorista</field>
+            <field name="category_id" ref="module_category_fuel_control"/>
+            <field name="comment">Pode registrar abastecimentos</field>
+        </record>
+
+        <!-- Grupo: Analista -->
+        <record id="group_fuel_analyst" model="res.groups">
+            <field name="name">Analista</field>
+            <field name="category_id" ref="module_category_fuel_control"/>
+            <field name="implied_ids" eval="[(4, ref('group_fuel_driver'))]"/>
+            <field name="comment">Pode visualizar relatórios e análises de abastecimentos</field>
+        </record>
+
+        <!-- Grupo: Gerente -->
+        <record id="group_fuel_manager" model="res.groups">
+            <field name="name">Gerente</field>
+            <field name="category_id" ref="module_category_fuel_control"/>
+            <field name="implied_ids" eval="[(4, ref('group_fuel_analyst'))]"/>
+            <field name="comment">Acesso total ao módulo de controle de combustível</field>
+        </record>
+
+    </data>
+</odoo>
