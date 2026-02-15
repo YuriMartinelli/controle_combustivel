@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        
+        <!-- List View - Odoo 19 (usando tag <list>) -->
+        <record id="view_fuel_supply_list" model="ir.ui.view">
+            <field name="name">fuel.supply.list</field>
+            <field name="model">fuel.supply</field>
+            <field name="arch" type="xml">
+                <list string="Abastecimentos" default_order="date desc">
+                    <field name="name" optional="show"/>
+                    <field name="vehicle_id" widget="badge" decoration-info="1"/>
+                    <field name="date"/>
+                    <field name="liters" sum="Total de Litros"/>
+                    <field name="amount_total" sum="Total Geral"/>
+                    <field name="driver_id" optional="show"/>
+                    <field name="state" widget="badge" decoration-success="state == 'confirmed'" decoration-muted="state == 'cancelled'" optional="show"/>
+                </list>
+            </field>
+        </record>
+
+        <!-- Search View com filtros por veículo e agrupamento por mês -->
+        <record id="view_fuel_supply_search" model="ir.ui.view">
+            <field name="name">fuel.supply.search</field>
+            <field name="model">fuel.supply</field>
+            <field name="arch" type="xml">
+                <search string="Pesquisar Abastecimentos">
+                    <field name="name" string="Referência"/>
+                    <field name="vehicle_id" string="Veículo"/>
+                    <field name="driver_id" string="Motorista"/>
+                    
+                    <!-- Filtros por veículo -->
+                    <filter string="Filtrar por Veículo" name="filter_by_vehicle" 
+                            domain="[]" context="{'group_by': 'vehicle_id'}"/>
+                    
+                    <separator/>
+                    
+                    <filter string="Este Mês" name="filter_month" 
+                            domain="[('date', '&gt;=', datetime.datetime.now().replace(day=1, hour=0, minute=0, second=0))]"/>
+                    
+                    <!-- Agrupamentos -->
+                    <group expand="0" string="Agrupar Por">
+                        <filter string="Veículo" name="group_vehicle" context="{'group_by': 'vehicle_id'}"/>
+                        <filter string="Motorista" name="group_driver" context="{'group_by': 'driver_id'}"/>
+                        <separator/>
+                        <filter string="Data (Mês)" name="group_date_month" context="{'group_by': 'date:month'}"/>
+                        <filter string="Data (Ano)" name="group_date_year" context="{'group_by': 'date:year'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <!-- Form View -->
+        <record id="view_fuel_supply_form" model="ir.ui.view">
+            <field name="name">fuel.supply.form</field>
+            <field name="model">fuel.supply</field>
+            <field name="arch" type="xml">
+                <form string="Abastecimento">
+                    <header>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,confirmed"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" readonly="1"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group string="Veículo e Motorista">
+                                <field name="vehicle_id" options="{'no_create': True}"/>
+                                <field name="driver_id" options="{'no_create': True}"/>
+                                <field name="date"/>
+                                <field name="odometer"/>
+                                <field name="fuel_tank_id" options="{'no_create': True}"/>
+                            </group>
+                            <group string="Dados Financeiros">
+                                <field name="liters"/>
+                                <field name="price_unit"/>
+                                <field name="amount_total" readonly="1" class="oe_subtotal_footer_separator"/>
+                            </group>
+                        </group>
+                        <group>
+                            <group string="Responsável">
+                                <field name="user_id" options="{'no_create': True}"/>
+                            </group>
+                        </group>
+                        <group string="Observações">
+                            <field name="notes" nolabel="1" placeholder="Adicione observações sobre este abastecimento..."/>
+                        </group>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+    </data>
+</odoo>

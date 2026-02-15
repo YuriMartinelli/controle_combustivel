@@ -6,6 +6,7 @@ from odoo.exceptions import ValidationError
 class FuelSupply(models.Model):
     _name = 'fuel.supply'
     _description = 'Abastecimento de Combustível'
+    _inherit = ['mail.thread', 'mail.activity.mixin']
     _order = 'date desc'
 
     name = fields.Char(

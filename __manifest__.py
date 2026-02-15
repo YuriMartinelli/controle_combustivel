@@ -34,7 +34,7 @@ Funcionalidades principais:
     'category': 'Operations',
     'version': '1.0',
 
-    'depends': ['base', 'fleet'],
+    'depends': ['base', 'fleet', 'mail'],
 
     'data': [
         # Security
@@ -42,9 +42,10 @@ Funcionalidades principais:
         'security/ir.model.access.csv',
         
         # Views
-        'views/abastecimento_views.xml',
-        'views/estoque_combustivel_views.xml',
-        'views/menu.xml',
+        'views/fuel_supply_views.xml',
+        'views/full_viewls.xml',
+        'views/views.xml',
+        'views/templates.xml',
     ],
     
     'demo': [
