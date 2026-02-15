@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from odoo import models, fields, api
+from odoo.exceptions import ValidationError
 
 
 class FuelSupply(models.Model):
@@ -84,6 +85,13 @@ class FuelSupply(models.Model):
         ('cancelled', 'Cancelado')
     ], string='Status', default='draft', required=True)
     
+    fuel_tank_id = fields.Many2one(
+        'fuel.tank',
+        string='Tanque',
+        ondelete='restrict',
+        help='Tanque de onde o combustível foi retirado'
+    )
+    
     @api.depends('liters', 'price_unit')
     def _compute_amount_total(self):
         """Calcula o valor total multiplicando litros por valor unitário"""
@@ -92,7 +100,26 @@ class FuelSupply(models.Model):
     
     @api.model
     def create(self, vals):
-        """Gera sequência automática para o campo name"""
+        """Gera sequência automática e verifica/desconta do estoque do tanque"""
+        # Gera sequência automática
         if vals.get('name', 'Novo') == 'Novo':
             vals['name'] = self.env['ir.sequence'].next_by_code('fuel.supply') or 'Novo'
+        
+        # Verifica e desconta do estoque do tanque
+        liters = vals.get('liters', 0)
+        fuel_tank_id = vals.get('fuel_tank_id')
+        
+        if fuel_tank_id and liters > 0:
+            fuel_tank = self.env['fuel.tank'].browse(fuel_tank_id)
+            if fuel_tank.exists():
+                # Verifica se há estoque suficiente
+                if fuel_tank.current_level < liters:
+                    raise ValidationError(
+                        f'Estoque insuficiente no tanque "{fuel_tank.name}". '
+                        f'Disponível: {fuel_tank.current_level:.2f}L, '
+                        f'Necessário: {liters:.2f}L'
+                    )
+                # Remove o combustível do tanque
+                fuel_tank.remove_fuel(liters)
+        
         return super(FuelSupply, self).create(vals)
