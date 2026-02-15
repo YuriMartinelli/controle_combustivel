@@ -1,2 +1,7 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_custom_addons/controle_combustivel_custom_addons/controle_combustivel,custom_addons/controle_combustivel.custom_addons/controle_combustivel,model_custom_addons/controle_combustivel_custom_addons/controle_combustivel,base.group_user,1,1,1,1
+access_fuel_supply_driver,access.fuel.supply.driver,model_fuel_supply,group_fuel_driver,1,0,1,0
+access_fuel_supply_analyst,access.fuel.supply.analyst,model_fuel_supply,group_fuel_analyst,1,0,0,0
+access_fuel_supply_manager,access.fuel.supply.manager,model_fuel_supply,group_fuel_manager,1,1,1,1
+access_fuel_tank_driver,access.fuel.tank.driver,model_fuel_tank,group_fuel_driver,1,0,0,0
+access_fuel_tank_analyst,access.fuel.tank.analyst,model_fuel_tank,group_fuel_analyst,1,0,0,0
+access_fuel_tank_manager,access.fuel.tank.manager,model_fuel_tank,group_fuel_manager,1,1,1,1
